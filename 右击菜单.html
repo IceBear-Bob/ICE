@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>自制右击菜单</title>
+	<style type="text/css">
+		body{ position:relative;}
+		ul,li{ margin:0; padding:0; list-style:none; font-size:12px;}
+		.popup_menu{position:absolute; z-index:90; border:1px solid #AEAEAE; padding:2px; width:120px;}
+		.popup_menu a{ display:block; color:#325B8E; text-indent:12px; text-decoration:none; height:26px; line-height:25px; padding-right:5px;}
+		.popup_menu a:hover{ background:#57B4E4; color:#fff; border-radius:5px;}
+	</style>
+	<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			init();
+		})
+
+		function init(){
+			removeRightClickMenu();
+		}
+
+		function removeRightClickMenu(){
+			 /*禁止右击菜单*/
+			 $(document).bind("contextmenu",function(e){
+        		return false;
+    		});
+			 /*给整个文档流绑定右击事件*/
+			document.onmousedown = function(e){  
+        		if(e.button == "2"){  
+           			getFocus();
+        		}  
+    		}  
+		}
+		function getFocus(){
+			 /*追踪鼠标焦点*/
+			 var popupmenu =createRightClickMenu();
+			 l = ($(document).width() - event.clientX) < popupmenu.width() ? (event.clientX - popupmenu.width()) : event.clientX;
+      		 t = ($(document).height() - event.clientY) < popupmenu.height() ? (event.clientY - popupmenu.height()) : event.clientY;
+      		 popupmenu.css({left: l,top: t}).show();
+      		 return false;
+		}
+		function createRightClickMenu() {
+			$('.popup_menu').remove();
+			var popupMenuApp = $('<div class="popup_menu app-menu"><ul><li><a menu="menu1">源码之家</a></li><li><a menu="menu2">百度</a></li><li><a menu="menu3">新浪</a></li></ul></div>')
+			.find('a').attr('href','javascript:;')
+			.end().appendTo('body');
+			//绑定事件
+			$('.app-menu a[menu="menu1"]').on('click', function (){
+				window.location.href="http://www.mycodes.net";
+            });
+			$('.app-menu a[menu="menu2"]').on('click', function (){
+				window.location.href="http://www.baidu.com";
+            });
+			$('.app-menu a[menu="menu3"]').on('click', function (){
+				 window.location.href="http://www.sina.com.cn";
+            });
+            return popupMenuApp;
+		}
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
